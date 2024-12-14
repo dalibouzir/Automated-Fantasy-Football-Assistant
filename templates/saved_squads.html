@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saved Squads</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to right, #00a2ff, #8c00ff);
+        color: #fff;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #ff0073;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      table th,
+      table td {
+        text-align: left;
+        padding: 12px 15px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      table thead th {
+        background-color: #ff0073;
+        color: #fff;
+        font-size: 16px;
+      }
+
+      table tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        color: white;
+      }
+
+      .btn-danger {
+        background-color: #dc3545;
+        color: white;
+      }
+
+      .btn-compare {
+        background-color: #28a745;
+        color: white;
+      }
+
+      .btn:hover {
+        opacity: 0.8;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: #222;
+        color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 900px;
+      }
+
+      .close-btn {
+        font-size: 28px;
+        color: #aaa;
+        float: right;
+        cursor: pointer;
+      }
+
+      .close-btn:hover {
+        color: white;
+      }
+
+      .compare-highlight-same {
+        background-color: #28a745 !important; /* Green */
+      }
+
+      .compare-highlight-different {
+        background-color: #dc3545 !important; /* Red */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1 class="mb-4">Saved Squads</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Select</th>
+            <th>Squad Name</th>
+            <th>Squad ID</th>
+            <th>Date Saved</th>
+            <th>Total Cost (M)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="squadTableBody">
+          <!-- Data will be inserted here via JavaScript -->
+        </tbody>
+      </table>
+      <button
+        class="btn btn-compare"
+        id="compareButton"
+        disabled
+        onclick="compareSquads()"
+      >
+        Compare Selected Squads
+      </button>
+    </div>
+
+    <!-- Modal for Squad Comparison -->
+    <div id="compareModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        <div class="section-title">Squad Comparison</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Squad 1</th>
+              <th>Squad 2</th>
+            </tr>
+          </thead>
+          <tbody id="compareTableBody">
+            <!-- Comparison rows will be inserted dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="fullSquadModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeSquadModalBtn">&times;</span>
+        <div class="section-title">Players</div>
+        <table id="playerTable" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Player Name</th>
+              <th>Position</th>
+              <th>Team</th>
+              <th>Cost (M)</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody id="playerTableBody">
+            <!-- Player rows will be inserted here via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const selectedSquads = [];
+
+      fetch("/api/view_saved_squads")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data); // Log the response to check if 'name' exists
+          const tableBody = document.getElementById("squadTableBody");
+          data.forEach((squad) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>
+                            <input type="checkbox" class="select-squad-checkbox" data-squad-id="${
+                              squad._id
+                            }" onchange="handleSquadSelection('${squad._id}')">
+                        </td>
+                        <td>${squad.squad_name || "Unnamed"}</td>
+                        <td>${squad._id}</td>
+                        <td>${squad.date_saved}</td>
+                        <td>${squad.total_cost}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="viewPlayers('${
+                              squad._id
+                            }')">View Players</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteSquad('${
+                              squad._id
+                            }')">Delete</button>
+                        </td>
+                    `;
+            tableBody.appendChild(row);
+          });
+        });
+
+      // Handle squad selection
+      function handleSquadSelection(squadId) {
+        const checkbox = document.querySelector(
+          `input[data-squad-id="${squadId}"]`
+        );
+        if (checkbox.checked) {
+          selectedSquads.push(squadId);
+        } else {
+          const index = selectedSquads.indexOf(squadId);
+          if (index > -1) selectedSquads.splice(index, 1);
+        }
+        document.getElementById("compareButton").disabled =
+          selectedSquads.length !== 2;
+      }
+
+      // Compare squads
+      function compareSquads() {
+        if (selectedSquads.length !== 2) {
+          alert("Please select exactly 2 squads to compare.");
+          return;
+        }
+
+        Promise.all([
+          fetch(`/api/squad_players/${selectedSquads[0]}`).then((res) =>
+            res.json()
+          ),
+          fetch(`/api/squad_players/${selectedSquads[1]}`).then((res) =>
+            res.json()
+          ),
+        ]).then(([squad1, squad2]) => {
+          const compareTableBody = document.getElementById("compareTableBody");
+          compareTableBody.innerHTML = "";
+
+          const allPlayers = new Set([
+            ...squad1.squad.map((p) => p.web_name),
+            ...squad2.squad.map((p) => p.web_name),
+          ]);
+
+          allPlayers.forEach((playerName) => {
+            const player1 = squad1.squad.find((p) => p.web_name === playerName);
+            const player2 = squad2.squad.find((p) => p.web_name === playerName);
+
+            const row = document.createElement("tr");
+            row.classList.add(
+              player1 && player2 && player1.web_name === player2.web_name
+                ? "compare-highlight-same"
+                : "compare-highlight-different"
+            );
+            row.innerHTML = `
+                        <td>${playerName}</td>
+                        <td>${player1 ? player1.web_name : "N/A"}</td>
+                        <td>${player2 ? player2.web_name : "N/A"}</td>
+                    `;
+            compareTableBody.appendChild(row);
+          });
+
+          document.getElementById("compareModal").style.display = "block";
+        });
+      }
+
+      // Close modal
+      document.getElementById("closeModalBtn").onclick = () => {
+        document.getElementById("compareModal").style.display = "none";
+      };
+
+      window.onclick = (event) => {
+        if (event.target === document.getElementById("compareModal")) {
+          document.getElementById("compareModal").style.display = "none";
+        }
+      };
+
+      // Function to view players in a specific squad
+      function viewPlayers(squadId) {
+        fetch(`/api/squad_players/${squadId}`)
+          .then((response) => response.json())
+          .then((squad) => {
+            const playerTableBody = document.getElementById("playerTableBody");
+            playerTableBody.innerHTML = "";
+
+            squad.squad.forEach((player) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                            <td>${player.web_name}</td>
+                            <td>${player.element_type}</td>
+                            <td>${player.team}</td>
+                            <td>${player.now_cost}</td>
+                            <td>${player.total_points}</td>
+                        `;
+              playerTableBody.appendChild(row);
+            });
+
+            document.getElementById("fullSquadModal").style.display = "block";
+          });
+      }
+
+      // Close player squad modal
+      document.getElementById("closeSquadModalBtn").onclick = () => {
+        document.getElementById("fullSquadModal").style.display = "none";
+      };
+
+      window.onclick = (event) => {
+        if (event.target === document.getElementById("fullSquadModal")) {
+          document.getElementById("fullSquadModal").style.display = "none";
+        }
+      };
+      // Function to delete a squad
+      function deleteSquad(squadId) {
+        if (confirm("Are you sure you want to delete this squad?")) {
+          fetch(`/api/delete_squad/${squadId}`, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Remove the deleted squad from the table
+                const row = document
+                  .querySelector(`button[onclick="deleteSquad('${squadId}')"]`)
+                  .closest("tr");
+                row.remove();
+              }
+              alert(data.message);
+            })
+            .catch((error) => alert(`Error deleting squad: ${error}`));
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier League Players</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #00a2ff, #8c00ff);
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff0073;
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 60%;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+        }
+
+        select, button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: #ff0073;
+            color: white;
+            border: none;
+        }
+
+        select {
+            width: 150px;
+            margin: 0 10px;
+        }
+
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        th {
+            background-color: #ff0073;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            color: #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background: #0056b3;
+        }
+
+        .pagination a.disabled {
+            background: #555;
+            pointer-events: none;
+        }
+
+        .filters a {
+            margin-left: 10px;
+            color: #ff0073;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .filters a:hover {
+            color: #ffffff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Premier League Players</h1>
+        <form id="search-form" method="get" action="/">
+            <div class="filters">
+                <!-- Search Field -->
+                <input
+                    type="text"
+                    id="search"
+                    name="search"
+                    placeholder="Search by player name..."
+                    value="{{ search_query }}"
+                    class="search-bar"
+                />
+                </br></br></br>
+                <!-- Position Filter -->
+                <select name="position" id="position" class="filter-dropdown">
+                    <option value="">All Positions</option>
+                    <option value="GK" {% if position_filter == 'GK' %}selected{% endif %}>Goalkeeper</option>
+                    <option value="DEF" {% if position_filter == 'DEF' %}selected{% endif %}>Defender</option>
+                    <option value="MID" {% if position_filter == 'MID' %}selected{% endif %}>Midfielder</option>
+                    <option value="FWD" {% if position_filter == 'FWD' %}selected{% endif %}>Forward</option>
+                </select>
+                
+                <!-- Team Filter -->
+                <select name="team" id="team" class="filter-dropdown">
+                    <option value="">All Teams</option>
+                    {% for team in teams %}
+                    <option value="{{ team }}" {% if team_filter == team %}selected{% endif %}>{{ team }}</option>
+                    {% endfor %}
+                </select>
+        
+                <!-- Sort By -->
+                <select name="sort_by" id="sort_by" class="filter-dropdown">
+                    <option value="cost" {% if sort_by == 'cost' %}selected{% endif %}>Sort by Cost</option>
+                    <option value="points" {% if sort_by == 'points' %}selected{% endif %}>Sort by Points</option>
+                </select>
+        
+                <!-- Apply Button -->
+                <button type="submit" class="apply-btn">Apply</button>
+                <a href="/predict">See Predicted Sqaud</a>
+                <a href="/gameweeks_with_games">See Game Weks</a>
+               
+            </div>
+        </form>
+        
+        
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Team</th>
+                    <th>Position</th>
+                    <th>Cost</th>
+                    <th>Points</th>
+                    <th>Next Opponent</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="player-table">
+                {% for player in players %}
+                <tr>
+                    <td>{{ player.web_name }}</td>
+                    <td>{{ player.team_name }}</td>
+                    <td>{{ player.position }}</td>
+                    <td>£{{ player.now_cost / 10 }}M</td>
+                    <td>{{ player.total_points }}</td>
+                    <td>{{ player.next_opponent }}</td>
+
+                    <td><a href="/player/{{ player.id }}">See More</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <a href="/?page={{ page - 1 }}&search={{ search_query }}&sort_by={{ sort_by }}&position={{ position_filter }}&team={{ team_filter }}"
+               class="{% if page <= 1 %}disabled{% endif %}">
+                Previous
+            </a>
+            <a href="/?page={{ page + 1 }}&search={{ search_query }}&sort_by={{ sort_by }}&position={{ position_filter }}&team={{ team_filter }}"
+               class="{% if page * per_page >= total %}disabled{% endif %}">
+                Next
+            </a>
+        </div>
+
+    <script>
+        document.getElementById("search").addEventListener("input", function () {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(function () {
+                fetchFilteredData();
+            }, 500);
+        });
+
+        function fetchFilteredData() {
+            const formData = new FormData(document.getElementById("search-form"));
+            fetch("/", {
+                method: "GET",
+                body: formData,
+            })
+                .then((response) => response.text())
+                .then((html) => {
+                    document.getElementById("player-table").innerHTML = html;
+                })
+                .catch((error) => console.error("Error fetching data:", error));
+        }
+    </script>
+</body>
+</html>

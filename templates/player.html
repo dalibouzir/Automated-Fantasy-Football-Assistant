@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ player.web_name }} - FPL Player Details</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #00a2ff, #8c00ff);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 2.8em;
+            color: #ff0073;
+            margin-bottom: 10px;
+            text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin: 5px 0;
+            color: #ddd;
+        }
+
+        .stats-card {
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .stat h3 {
+            color: #ff0073;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat p {
+            font-size: 1.1em;
+            color: #ddd;
+        }
+
+        .fixtures-section {
+            margin: 30px 0;
+        }
+
+        .fixtures-section h2 {
+            font-size: 2em;
+            color: #f39c12;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        th {
+            background: #ff0073;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ddd;
+        }
+
+        .difficulty-1 { 
+            color: #5bc0de; 
+            font-weight: bold; /* Bold text for easy */
+        }
+        .difficulty-2 { 
+            color: #f0ad4e; 
+            font-weight: bold; /* Bold text for medium */
+        }
+        .difficulty-3 { 
+            color: #d9534f; 
+            font-weight: bold; /* Bold text for hard */
+        }
+        .difficulty-4 { 
+            color: #c82333; 
+            font-weight: bold; /* Bold text for very hard */
+        }
+        .difficulty-5 { 
+            color: #a94442; 
+            font-weight: bold; /* Bold text for extreme */
+        }
+
+
+
+        .back-link {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+            text-align: center;
+            display: block;
+            max-width: 200px;
+        }
+
+        .back-link:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2em;
+            }
+
+            .hero p {
+                font-size: 1em;
+            }
+
+            .stat h3 {
+                font-size: 1.2em;
+            }
+
+            .stat p {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                font-size: 0.9em;
+            }
+
+            .back-link {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>{{ player.web_name }}</h1>
+            <p><strong>Team:</strong> {{ player.team_name }}</p>
+            <p><strong>Cost:</strong> £{{ player.now_cost / 10 }}M</p>
+            <p><strong>FPL Points:</strong> {{ player.total_points }}</p>
+            <p><strong>Pick %:</strong> {{ player.selected_by_percent }}%</p>
+        </div>
+        <a href="/" class="back-link">Back to Players</a>
+        <!-- Stats Section -->
+        <div class="stats-card">
+            <div class="stat">
+                <h3>Goals Scored</h3>
+                <p>{{ player.goals_scored }}</p>
+            </div>
+            <div class="stat">
+                <h3>Assists</h3>
+                <p>{{ player.assists }}</p>
+            </div>
+            <div class="stat">
+                <h3>Expected Goals (xG)</h3>
+                <p>{{ player.expected_goals }}</p>
+            </div>
+            <div class="stat">
+                <h3>Expected Assists (xA)</h3>
+                <p>{{ player.expected_assists }}</p>
+            </div>
+            <div class="stat">
+                <h3>Minutes Played</h3>
+                <p>{{ player.minutes }}</p>
+            </div>
+            <div class="stat">
+                <h3>Goals per Game</h3>
+                <p>{{ player.goals_scored / player.minutes if player.minutes else 0 }}</p>
+            </div>
+            <div class="stat">
+                <h3>Yellow Cards</h3>
+                <p>{{ player.yellow_cards }}</p>
+            </div>
+            <div class="stat">
+                <h3>Red Cards</h3>
+                <p>{{ player.red_cards }}</p>
+            </div>
+        </div>
+
+        <!-- Fixtures Section -->
+        <div class="fixtures-section">
+            <h2>Upcoming Fixtures</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Gameweek</th>
+                        <th>Opponent</th>
+                        <th>Difficulty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fixture in fixtures %}
+                    <tr>
+                        <td>{{ fixture.event_name }}</td>
+                        <td>{{ fixture.opponent_name }}</td>
+                        <td class="difficulty-{{ fixture.difficulty }}">{{ fixture.difficulty }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</body>
+</html>

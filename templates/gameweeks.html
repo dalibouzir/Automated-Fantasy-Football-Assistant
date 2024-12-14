@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Weeks and Fixtures</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #00a2ff, #8c00ff);
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 80%;
+            min-width: 600px;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff0073;
+            margin-bottom: 20px;
+        }
+
+        .gameweek-title {
+            cursor: pointer;
+            padding: 10px;
+            background: linear-gradient(90deg, #ff0073, #ff5757);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .gameweek-title:hover {
+            background: linear-gradient(90deg, #ff5757, #ff0073);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .arrow-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .arrow-icon.rotate {
+            transform: rotate(180deg);
+        }
+
+        .gameweek-details {
+            display: none;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            color: #fff;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: left;
+        }
+
+        th {
+            background-color: #ff0073;
+        }
+
+        .navigation-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Premier League Game Weeks</h1>
+
+        {% for gameweek in gameweeks %}
+        <div class="gameweek">
+            <div class="gameweek-title" onclick="toggleDetails(this)">
+                <span>{{ gameweek.name }}</span>
+                <span class="arrow-icon">&#9660;</span>
+            </div>
+            <div class="gameweek-details">
+                <p>
+                    Deadline: {{ gameweek.deadline }}<br>
+                    Current: {{ 'Yes' if gameweek.is_current else 'No' }} |
+                    Next: {{ 'Yes' if gameweek.is_next else 'No' }} |
+                    Finished: {{ 'Yes' if gameweek.is_finished else 'No' }}
+                </p>
+                {% if gameweek.fixtures %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kickoff Time</th>
+                            <th>Fixture</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fixture in gameweek.fixtures %}
+                        <tr>
+                            <td>{{ fixture.kickoff_time }}</td>
+                            <td>{{ fixture.home_team }} vs. {{ fixture.away_team }}</td>
+                            <td>
+                                {% if fixture.home_score is not none and fixture.away_score is not none %}
+                                    {{ fixture.home_score }} - {{ fixture.away_score }}
+                                {% else %}
+                                    TBD
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No fixtures available for this game week.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    <a href="/">
+        <button class="navigation-button">Go Back</button>
+    </a>
+
+    <script>
+        function toggleDetails(element) {
+            const details = element.nextElementSibling;
+            const icon = element.querySelector('.arrow-icon');
+
+            if (details.style.display === 'block') {
+                details.style.display = 'none';
+                icon.classList.remove('rotate');
+            } else {
+                details.style.display = 'block';
+                icon.classList.add('rotate');
+            }
+        }
+    </script>
+</body>
+</html>
