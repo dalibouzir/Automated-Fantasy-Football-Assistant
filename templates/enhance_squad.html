@@ -1,0 +1,468 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhance Your Squad</title>
+    <style>
+      body {
+        background: linear-gradient(to right, #00a2ff, #8c00ff);
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+        padding: 20px;
+      }
+
+      h1,
+      h3 {
+        text-align: center;
+        color: #ff0073;
+      }
+
+      form {
+        margin: auto;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 30px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        max-width: 1000px;
+        width: 100%;
+      }
+
+      .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .form-column {
+        flex: 1;
+        margin-right: 20px;
+      }
+
+      .form-column:last-child {
+        margin-right: 0;
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+        color: #ffffff;
+        font-size: 16px;
+      }
+
+      /* Select and input field styling */
+      select,
+      input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        color: black;
+        background-color: white;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      select:focus,
+      input:focus {
+        border-color: #ff0073;
+        outline: none;
+      }
+
+      input::placeholder {
+        color: #ccc;
+      }
+
+      /* Styling for Select2 */
+      .select2-container .select2-selection--single {
+        background-color: white;
+        color: black;
+        padding: 12px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      .select2-container .select2-selection__rendered {
+        color: black;
+      }
+
+      .select2-container--default
+        .select2-search--dropdown
+        .select2-search__field {
+        background-color: white;
+        color: black;
+        border: 1px solid #ccc;
+      }
+
+      .select2-container--default .select2-dropdown {
+        background-color: #333 !important; /* Ensure the dropdown has the correct color */
+        color: white !important;
+        border-radius: 5px;
+        border: 1px solid #ff0073;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .select2-container--default .select2-results__option {
+        padding: 10px;
+        background-color: #333;
+        color: white;
+      }
+
+      .select2-container--default .select2-results__option--highlighted {
+        background-color: #ff0073;
+        color: white;
+      }
+
+      .select2-container--default
+        .select2-results__option[aria-disabled="true"] {
+        color: #ccc;
+        background-color: #333;
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #ffffff;
+        color: #000000;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        text-align: center;
+        width: 90%;
+      }
+
+      .modal-content h3 {
+        color: #ff0073;
+        font-size: 24px;
+      }
+
+      .modal-content ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .modal-content ul li {
+        margin: 10px 0;
+      }
+
+      .modal-close {
+        background-color: #ff0073;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .modal-close:hover {
+        background-color: #e60067;
+      }
+
+      button {
+        background-color: #ff0073;
+        color: white;
+        padding: 12px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #e60067;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Enhance Your Fantasy Squad</h1>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form id="enhance-form">
+      <div class="form-row">
+         Main Squad -->
+<!--
+        <div class="form-column">
+          <h3>Main Squad (11 Players)</h3>
+          {% for i in range(11) %}
+          <label for="main_player_{{ i }}">Player {{ i + 1 }}</label>
+          <select name="main_player_{{ i }}" id="main_player_{{ i }}">
+            <option value="">Select a player</option>
+            {% for player in players %}
+            <option value="{{ player.id }}">
+              {{ player.web_name }} - £{{ (player.now_cost or 0) / 10 }}M
+            </option>
+            {% endfor %}
+          </select>
+          {% endfor %}
+        </div>
+
+        Bench -->
+<!-- 
+        <div class="form-column">
+          <h3>Bench (4 Players)</h3>
+          {% for i in range(4) %}
+          <label for="bench_player_{{ i }}">Bench Player {{ i + 1 }}</label>
+          <select name="bench_player_{{ i }}" id="bench_player_{{ i }}">
+            <option value="">Select a player</option>
+            {% for player in players %}
+            <option value="{{ player.id }}">
+              {{ player.web_name }} - £{{ (player.now_cost or 0) / 10 }}M
+            </option>
+            {% endfor %}
+          </select>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-column">
+          <label for="formation">Formation</label>
+          <select name="formation" id="formation">
+            <option value="4-4-2">4-4-2</option>
+            <option value="4-3-3">4-3-3</option>
+            <option value="3-5-2">3-5-2</option>
+            <option value="5-3-2">5-3-2</option>
+          </select>
+        </div>
+        <div class="form-column">
+          <label for="budget">Budget (£M)</label>
+          <input
+            type="number"
+            name="budget"
+            id="budget"
+            value="100"
+            step="0.1"
+            placeholder="Enter your budget"
+          />
+          <label for="free_transfers">Free Transfers</label>
+          <input
+            type="number"
+            name="free_transfers"
+            id="free_transfers"
+            value="0"
+            min="0"
+            placeholder="Enter free transfers"
+          />
+        </div>
+      </div>
+
+      <button type="button" id="optimize-btn">Optimize Squad</button>
+    </form>
+
+    <div class="modal" id="squad-modal">
+      <div class="modal-content">
+        <h3>Enhanced Squad</h3>
+        <p id="free-subs-count"></p>
+        <h4>Substitutions</h4>
+        <ul id="subs-list"></ul>
+        <h4>Optimized Squad</h4>
+        <ul id="optimized-squad-list"></ul>
+        <button class="modal-close" id="close-modal-btn">Close</button>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+      const form = document.getElementById("enhance-form");
+      const optimizeBtn = document.getElementById("optimize-btn");
+      const modal = document.getElementById("squad-modal");
+      const modalCloseBtn = document.getElementById("close-modal-btn");
+      const squadList = document.getElementById("optimized-squad-list");
+      const subsList = document.getElementById("subs-list");
+      const freeSubsCount = document.getElementById("free-subs-count");
+
+      optimizeBtn.addEventListener("click", async (e) => {
+        e.preventDefault(); // Prevent form submission
+
+        const formData = new FormData(form);
+
+        try {
+          const response = await fetch("/enhance_squad", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch optimized squad.");
+          }
+
+          const data = await response.json();
+
+          if (data.error) {
+            alert(data.error);
+            return;
+          }
+
+          freeSubsCount.textContent = `Free Transfers Used: ${data.free_transfers_used}`;
+
+          subsList.innerHTML = data.transferred_out
+            .map((outPlayer, index) => {
+              const inPlayer = data.transferred_in[index];
+              return `<li>${outPlayer.name} → ${inPlayer.name}</li>`;
+            })
+            .join("");
+
+          squadList.innerHTML = data.optimized_squad
+            .map(
+              (player) =>
+                `<li>${player.web_name} (£${player.now_cost / 10}M)</li>`
+            )
+            .join("");
+
+          modal.style.display = "flex";
+        } catch (error) {
+          alert("Error optimizing squad: " + error.message);
+        }
+      });
+
+      modalCloseBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+      $(document).ready(function () {
+        $("select").select2({
+          placeholder: "Select a player",
+          allowClear: true,
+        });
+      });
+      optimizeBtn.addEventListener("click", async (e) => {
+        e.preventDefault(); // Prevent form submission
+
+        const formData = new FormData(form);
+
+        try {
+          const response = await fetch("/enhance_squad", {
+            method: "POST",
+            body: formData,
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+          });
+
+          if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+
+          if (data.error) {
+            alert(`Error: ${data.error}`);
+            return;
+          }
+
+          // Populate modal with squad data
+          freeSubsCount.textContent = `Free Transfers Used: ${data.free_transfers_used}`;
+
+          subsList.innerHTML = data.transferred_out
+            .map((outPlayer, index) => {
+              const inPlayer = data.transferred_in[index];
+              return `<li>${outPlayer.name} → ${inPlayer.name}</li>`;
+            })
+            .join("");
+
+          squadList.innerHTML = data.squad
+            .map(
+              (player) =>
+                `<li>${player.web_name} (£${player.now_cost / 10}M)</li>`
+            )
+            .join("");
+
+          modal.style.display = "flex";
+        } catch (error) {
+          alert(`Error optimizing squad: ${error.message}`);
+        }
+      });
+
+      modalCloseBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    </script>
+  </body>
+</html>
+
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhance Your Squad</title>
+    <style>
+      body {
+        background: linear-gradient(to right, #00a2ff, #8c00ff);
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 40px;
+        border-radius: 10px;
+        max-width: 600px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #ff0073;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 18px;
+        color: #ffffff;
+        margin-bottom: 30px;
+      }
+
+      button {
+        background-color: #ff0073;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #e60067;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>We're Still Working On It!</h1>
+      <p>
+        Thank you for your patience. We're putting the finishing touches on this
+        feature.
+      </p>
+      <button onclick="window.location.href='/'">Go Back to Home</button>
+    </div>
+  </body>
+</html>

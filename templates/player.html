@@ -5,169 +5,231 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ player.web_name }} - FPL Player Details</title>
     <style>
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #00a2ff, #8c00ff);
-            color: #ffffff;
-        }
+       body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #00a2ff, #8c00ff);
+    color: #ffffff;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            background: rgba(0, 0, 0, 0.85);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
 
-        .hero {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+.hero {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-        .hero h1 {
-            font-size: 2.8em;
-            color: #ff0073;
-            margin-bottom: 10px;
-            text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
-        }
+.hero h1 {
+    font-size: 2.8em;
+    color: #ff0073;
+    margin-bottom: 10px;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+}
 
-        .hero p {
-            font-size: 1.2em;
-            margin: 5px 0;
-            color: #ddd;
-        }
+.hero p {
+    font-size: 1.2em;
+    margin: 5px 0;
+    color: #ddd;
+}
 
-        .stats-card {
-            margin: 20px 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+.stats-card {
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
 
-        .stat {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
+.stat {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
 
-        .stat h3 {
-            color: #ff0073;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
+.stat h3 {
+    color: #ff0073;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
 
-        .stat p {
-            font-size: 1.1em;
-            color: #ddd;
-        }
+.stat p {
+    font-size: 1.1em;
+    color: #ddd;
+}
 
-        .fixtures-section {
-            margin: 30px 0;
-        }
+.fixtures-section {
+    margin: 30px 0;
+}
 
-        .fixtures-section h2 {
-            font-size: 2em;
-            color: #f39c12;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+.fixtures-section h2 {
+    font-size: 2em;
+    color: #f39c12;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
-        th, td {
-            padding: 12px;
-            text-align: center;
-            font-size: 1em;
-        }
+th, td {
+    padding: 12px;
+    text-align: center;
+    font-size: 1em;
+}
 
-        th {
-            background: #ff0073;
-            color: white;
-            font-weight: bold;
-        }
+th {
+    background: #ff0073;
+    color: white;
+    font-weight: bold;
+}
 
-        td {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ddd;
-        }
+td {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ddd;
+}
 
-        .difficulty-1 { 
-            color: #5bc0de; 
-            font-weight: bold; /* Bold text for easy */
-        }
-        .difficulty-2 { 
-            color: #f0ad4e; 
-            font-weight: bold; /* Bold text for medium */
-        }
-        .difficulty-3 { 
-            color: #d9534f; 
-            font-weight: bold; /* Bold text for hard */
-        }
-        .difficulty-4 { 
-            color: #c82333; 
-            font-weight: bold; /* Bold text for very hard */
-        }
-        .difficulty-5 { 
-            color: #a94442; 
-            font-weight: bold; /* Bold text for extreme */
-        }
+.difficulty-1 { 
+    color: #5bc0de; 
+    font-weight: bold; 
+}
 
+.difficulty-2 { 
+    color: #f0ad4e; 
+    font-weight: bold; 
+}
 
+.difficulty-3 { 
+    color: #d9534f; 
+    font-weight: bold; 
+}
 
-        .back-link {
-            display: inline-block;
-            margin: 20px auto;
-            padding: 15px 30px;
-            background: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-size: 1.2em;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: background 0.3s ease;
-            text-align: center;
-            display: block;
-            max-width: 200px;
-        }
+.difficulty-4 { 
+    color: #c82333; 
+    font-weight: bold; 
+}
 
-        .back-link:hover {
-            background: #0056b3;
-        }
+.difficulty-5 { 
+    color: #a94442; 
+    font-weight: bold; 
+}
 
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.2em;
-            }
+.back-link {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 1.2em;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease;
+    text-align: center;
+    display: block;
+    max-width: 200px;
+}
 
-            .hero p {
-                font-size: 1em;
-            }
+.back-link:hover {
+    background: #0056b3;
+}
 
-            .stat h3 {
-                font-size: 1.2em;
-            }
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .stats-card {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 
-            .stat p {
-                font-size: 0.9em;
-            }
+    .hero h1 {
+        font-size: 2.5em;
+    }
 
-            th, td {
-                font-size: 0.9em;
-            }
+    .hero p {
+        font-size: 1.1em;
+    }
 
-            .back-link {
-                font-size: 1em;
-            }
-        }
+    table {
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.2em;
+    }
+
+    .hero p {
+        font-size: 1em;
+    }
+
+    .stat h3 {
+        font-size: 1.2em;
+    }
+
+    .stat p {
+        font-size: 0.9em;
+    }
+
+    th, td {
+        font-size: 0.9em;
+    }
+
+    .back-link {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    .hero h1 {
+        font-size: 2em;
+    }
+
+    .hero p {
+        font-size: 0.9em;
+    }
+
+    .stats-card {
+        grid-template-columns: 1fr;
+    }
+
+    .stat h3 {
+        font-size: 1em;
+    }
+
+    .stat p {
+        font-size: 0.8em;
+    }
+
+    table {
+        font-size: 0.85em;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    .back-link {
+        font-size: 0.9em;
+        padding: 10px 20px;
+        max-width: 150px;
+    }
+}
+
     </style>
 </head>
 <body>

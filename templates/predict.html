@@ -6,135 +6,191 @@
     <title>Best Squad Prediction</title>
     <style>
        body {
-    background: linear-gradient(to right, #00a2ff, #8c00ff);
-    font-family: Arial, sans-serif;
-    color: #ffffff;
-    padding: 20px;
-}
+            background: linear-gradient(to right, #00a2ff, #8c00ff);
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            padding: 20px;
+            transform: scale(0.8); /* Scale the page to 80% */
+            transform-origin: top center; /* Ensure scaling is from the top center */
+            margin: 0;
+        }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
 
-.player-card {
-    width: 200px;
-    padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.7);
-    position: relative;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
+        .player-card {
+            width: 200px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            position: relative;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
 
-.player-card:hover {
-    transform: scale(1.05);
-    background-color: rgba(0, 0, 0, 0.9);
-}
+        .player-card:hover {
+            transform: scale(1.05);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
 
-.player-card h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #ff0073;
-}
+        .player-card h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #ff0073;
+        }
 
-.player-card p {
-    font-size: 14px;
-    margin: 5px 0;
-    color: #ffffff;
-}
+        .player-card p {
+            font-size: 0.875rem;
+            margin: 5px 0;
+            color: #ffffff;
+        }
 
-.player-card .cost {
-    font-weight: bold;
-    color: #ffd700; /* Gold */
-}
+        .player-card .cost {
+            font-weight: bold;
+            color: #ffd700; /* Gold */
+        }
 
-.player-card .points {
-    color: #28a745; /* Green */
-}
+        .player-card .points {
+            color: #28a745; /* Green */
+        }
 
-.player-card .team {
-    font-style: italic;
-    color: #cccccc; /* Light gray */
-}
+        .player-card .team {
+            font-style: italic;
+            color: #cccccc; /* Light gray */
+        }
 
-.section-title {
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #ff0073;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-}
+        .section-title {
+            width: 100%;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff0073;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
 
-.difficulty {
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: white;
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 12px;
-}
+        .difficulty {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            display: inline-block;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.75rem;
+        }
 
-.difficulty-1 {
-    background-color: #28a745; /* Easy (green) */
-}
+        .difficulty-1 {
+            background-color: #28a745; /* Easy (green) */
+        }
 
-.difficulty-2 {
-    background-color: #ffc107; /* Moderate (yellow) */
-}
+        .difficulty-2 {
+            background-color: #ffc107; /* Moderate (yellow) */
+        }
 
-.difficulty-3 {
-    background-color: #fd7e14; /* Hard (orange) */
-}
+        .difficulty-3 {
+            background-color: #fd7e14; /* Hard (orange) */
+        }
 
-.difficulty-4, .difficulty-5 {
-    background-color: #dc3545; /* Very Hard (red) */
-}
+        .difficulty-4, .difficulty-5 {
+            background-color: #dc3545; /* Very Hard (red) */
+        }
 
-form {
-    text-align: center;
-    margin: 20px 0;
-}
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
 
-select, button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1em;
-    margin-top: 10px;
-    cursor: pointer;
-    border: none;
-    background-color: #ff0073;
-    color: white;
-    transition: background-color 0.3s ease;
-}
+        select, button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #ff0073;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
 
-button:hover, select:hover {
-    background-color: #e60067;
-}
+        button:hover, select:hover {
+            background-color: #e60067;
+        }
 
+        .title {
+            text-align: center;
+            color: red;
+            font-size: 2em;
+            margin-top: 20px;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            body {
+                transform: scale(1); /* Reset scaling for smaller devices */
+                padding: 10px;
+            }
+
+            .player-card {
+                width: 150px; /* Reduce player card size */
+                padding: 10px;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .difficulty {
+                font-size: 0.65rem;
+            }
+
+            .player-card h3 {
+                font-size: 1rem;
+            }
+
+            .player-card p {
+                font-size: 0.75rem;
+            }
+
+            .title {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .player-card {
+                width: 100%; /* Full width for player cards on small screens */
+                margin-bottom: 15px;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .difficulty {
+                font-size: 0.6rem;
+            }
+        }
     </style>
 </head>
 <body>
-
+    <div class="title">{{ title }}</div>
     <h1>Best 15 Players for Your Squad</h1>
     <p><strong>Total Cost:</strong> £{{ total_cost }}M</p>
     <p><strong>Total Predicted Points:</strong> {{ predicted_points }}</p>
     <form method="post" action="/save_squad">
-        <label for="formation">Choose a formation:</label>
-        <select id="formation" name="formation">
-            <option value="4-4-2">4-4-2</option>
-            <option value="4-3-3">4-3-3</option>
-            <option value="3-5-2">3-5-2</option>
-        </select>
         
         <label for="squad_name">Squad Name:</label>
         <input type="text" id="squad_name" name="squad_name" placeholder="Enter squad name" required />
@@ -143,8 +199,7 @@ button:hover, select:hover {
         <button type="button" onclick="redirectToSavedSquads()">Go to Saved Squads</button>
     </form>
     
-
-    <!-- Goalkeepers Section -->
+    <!-- Sections (Goalkeepers, Defenders, Midfielders, Forwards) -->
     <div class="section-title">Goalkeepers (2)</div>
     <div class="container">
         {% for player in squad if player.position == 'GK' %}
@@ -161,90 +216,84 @@ button:hover, select:hover {
         </div>
         {% endfor %}
     </div>
-<!-- Defenders Section -->
-<div class="section-title">Defenders (5)</div>
-<div class="container">
-    {% for player in squad if player.position == 'DEF' %}
-    <div class="player-card">
-        <div class="difficulty difficulty-{{ player.difficulty }}">
-            GW {{ player.next_opponent_difficulty }}
-        </div>
-        <h3>{{ player.web_name }}</h3>
-        <p>Position: {{ player.position }}</p>
-        <p class="cost">Cost: £{{ player.now_cost / 10 }}M</p>
-        <p class="points">Predicted Points: {{ player.predicted_points }}</p>
-        <p class="team">Team: {{ player.team_name }}</p>
-        <p>Next Opponent: {{ player.next_opponent }}</p>
-    </div>
-    {% endfor %}
-</div>
+ <!-- Defenders Section -->
+ <div class="section-title">Defenders (5)</div>
+ <div class="container">
+     {% for player in squad if player.position == 'DEF' %}
+     <div class="player-card">
+         <div class="difficulty difficulty-{{ player.difficulty }}">GW {{ player.next_opponent_difficulty }}</div>
+         <h3>{{ player.web_name }}</h3>
+         <p>Position: {{ player.position }}</p>
+         <p class="cost">Cost: £{{ player.now_cost / 10 }}M</p>
+         <p class="points">Predicted Points: {{ player.predicted_points }}</p>
+         <p class="team">Team: {{ player.team_name }}</p>
+         <p>Next Opponent: {{ player.next_opponent }}</p>
+     </div>
+     {% endfor %}
+ </div>
 
-<!-- Midfielders Section -->
-<div class="section-title">Midfielders (5)</div>
-<div class="container">
-    {% for player in squad if player.position == 'MID' %}
-    <div class="player-card">
-        <div class="difficulty difficulty-{{ player.difficulty }}">
-            GW {{ player.next_opponent_difficulty }}
-        </div>
-        <h3>{{ player.web_name }}</h3>
-        <p>Position: {{ player.position }}</p>
-        <p class="cost">Cost: £{{ player.now_cost / 10 }}M</p>
-        <p class="points">Predicted Points: {{ player.predicted_points }}</p>
-        <p class="team">Team: {{ player.team_name }}</p>
-        <p>Next Opponent: {{ player.next_opponent }}</p>
-    </div>
-    {% endfor %}
-</div>
+ <!-- Midfielders Section -->
+ <div class="section-title">Midfielders (5)</div>
+ <div class="container">
+     {% for player in squad if player.position == 'MID' %}
+     <div class="player-card">
+         <div class="difficulty difficulty-{{ player.difficulty }}">GW {{ player.next_opponent_difficulty }}</div>
+         <h3>{{ player.web_name }}</h3>
+         <p>Position: {{ player.position }}</p>
+         <p class="cost">Cost: £{{ player.now_cost / 10 }}M</p>
+         <p class="points">Predicted Points: {{ player.predicted_points }}</p>
+         <p class="team">Team: {{ player.team_name }}</p>
+         <p>Next Opponent: {{ player.next_opponent }}</p>
+     </div>
+     {% endfor %}
+ </div>
 
-<!-- Forwards Section -->
-<div class="section-title">Forwards (3)</div>
-<div class="container">
-    {% for player in squad if player.position == 'FWD' %}
-    <div class="player-card">
-        <div class="difficulty difficulty-{{ player.difficulty }}">
-            GW {{ player.next_opponent_difficulty }}
-        </div>
-        <h3>{{ player.web_name }}</h3>
-        <p>Position: {{ player.position }}</p>
-        <p class="cost">Cost: £{{ player.now_cost / 10 }}M</p>
-        <p class="points">Predicted Points: {{ player.predicted_points }}</p>
-        <p class="team">Team: {{ player.team_name }}</p>
-        <p>Next Opponent: {{ player.next_opponent }}</p>
-    </div>
-    {% endfor %}
-</div>
-</body>
-    <!-- Other Sections (Defenders, Midfielders, Forwards) follow similar structure -->
-
+ <!-- Forwards Section -->
+ <div class="section-title">Forwards (3)</div>
+ <div class="container">
+     {% for player in squad if player.position == 'FWD' %}
+     <div class="player-card">
+         <div class="difficulty difficulty-{{ player.difficulty }}">GW {{ player.next_opponent_difficulty }}</div>
+         <h3>{{ player.web_name }}</h3>
+         <p>Position: {{ player.position }}</p>
+         <p class="cost">Cost: £{{ player.now_cost / 10 }}M</p>
+         <p class="points">Predicted Points: {{ player.predicted_points }}</p>
+         <p class="team">Team: {{ player.team_name }}</p>
+         <p>Next Opponent: {{ player.next_opponent }}</p>
+     </div>
+     {% endfor %}
+ </div>
+    <!-- Repeat similar structure for other player positions -->
+    
     <script>
-       function saveSquad() {
-    const squadName = document.getElementById("squad_name").value;
+        function saveSquad() {
+            const squadName = document.getElementById("squad_name").value;
 
-    if (!squadName.trim()) {
-        alert("Please provide a squad name.");
-        return;
-    }
+            if (!squadName.trim()) {
+                alert("Please provide a squad name.");
+                return;
+            }
 
-    fetch('/save_squad', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            squad: {{ squad | tojson }},
-            squad_name: squadName 
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("Squad saved successfully!");
-        } else {
-            alert(data.message);
+            fetch('/save_squad', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    squad: {{ squad | tojson }},
+                    squad_name: squadName 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Squad saved successfully!");
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(err => alert("An error occurred while saving the squad."));
         }
-    })
-    .catch(err => alert("An error occurred while saving the squad."));
-}
-function redirectToSavedSquads() {
+
+        function redirectToSavedSquads() {
             setTimeout(function() {
                 window.location.href = '/saved_squads';
             }, 100);

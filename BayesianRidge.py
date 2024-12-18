@@ -340,7 +340,10 @@ def predict_best_squad():
     model = train_model(PLAYERS)  # Train Bayesian Ridge model
     players_with_predictions = predict_player_performance(model, PLAYERS)  # Add predictions with uncertainty
     squad, total_cost, predicted_points = optimize_squad(players_with_predictions, budget=budget)  # Optimize
-    return render_template("predict.html", squad=squad, total_cost=total_cost, predicted_points=predicted_points)
+    
+    # Pass the title dynamically
+    title = "Bayesian Rridge Model"
+    return render_template("predict.html", title=title, squad=squad, total_cost=total_cost, predicted_points=predicted_points)
 
 
 # MongoDB Configuration
@@ -425,6 +428,179 @@ def get_squad_players(squad_id):
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
+
+
+
+####### squad enhancement######
+
+
+
+def optimize_squad2(players, budget=100, initial_squad=None, position_limits=None, free_transfers=0):
+    preprocess_players(players)
+    num_players = len(players)
+
+    # Create LP problem
+    problem = LpProblem("FantasyFootballSquad", LpMaximize)
+
+    # Define decision variables (binary: 0 or 1)
+    decision_vars = [LpVariable(f"x{i}", cat="Binary") for i in range(num_players)]
+
+    # Objective function: maximize weighted score
+    predicted_points = [player['predicted_points'] for player in players]
+    problem += lpSum(decision_vars[i] * predicted_points[i] for i in range(num_players))
+
+    # Constraints
+    if position_limits:
+        positions = [player['position'] for player in players]
+        for pos, limit in position_limits.items():
+            problem += lpSum([decision_vars[i] for i in range(num_players) if positions[i] == pos]) == limit
+
+    # Budget constraint
+    costs = [player['now_cost'] / 10 for player in players]
+    problem += lpSum([decision_vars[i] * costs[i] for i in range(num_players)]) <= budget
+
+    # Initial squad constraint (locked players remain in the squad)
+    if initial_squad:
+        initial_ids = {player['id'] for player in initial_squad}
+        for i, player in enumerate(players):
+            if player['id'] in initial_ids:
+                problem += decision_vars[i] == 1
+
+    # Team constraint (no more than 3 players per team)
+    team_names = [player['team_name'] for player in players]
+    unique_teams = set(team_names)
+    for team in unique_teams:
+        problem += lpSum([decision_vars[i] for i in range(num_players) if team_names[i] == team]) <= 3
+
+    # Free transfers constraint
+    if initial_squad:
+        selected_indices = [i for i, player in enumerate(players) if player['id'] in {p['id'] for p in initial_squad}]
+        problem += lpSum(1 - decision_vars[i] for i in selected_indices) <= free_transfers
+
+    # Solve the problem
+    problem.solve()
+
+    # Extract selected players
+    selected_indices = [i for i in range(num_players) if decision_vars[i].varValue == 1]
+    squad = [players[i] for i in selected_indices]
+
+    # Identify substitutions
+    if initial_squad:
+        initial_ids = {player['id'] for player in initial_squad}
+        new_ids = {players[i]['id'] for i in selected_indices}
+        transferred_out = [player for player in initial_squad if player['id'] not in new_ids]
+        transferred_in = [players[i] for i in selected_indices if players[i]['id'] not in initial_ids]
+    else:
+        transferred_out = []
+        transferred_in = squad
+
+    total_cost = sum(player['now_cost'] / 10 for player in squad)
+    total_predicted_points = sum(player['predicted_points'] for player in squad)
+
+    # Return additional data for frontend
+    return {
+        "squad": squad,
+        "total_cost": total_cost,
+        "predicted_points": total_predicted_points,
+        "transferred_out": transferred_out,
+        "transferred_in": transferred_in,
+        "free_transfers_used": len(transferred_out)
+    }
+
+def parse_formation(formation):
+    """
+    Parses the formation string into a position limits dictionary.
+    Assumes the goalkeeper (GK) is always 1.
+    """
+    if not isinstance(formation, str):
+        raise ValueError("Formation must be a string in the format 'X-X-X'.")
+
+    # Check if the formation matches the expected pattern
+    if not re.match(r'^\d+-\d+-\d+$', formation):
+        raise ValueError("Invalid formation format. Use a valid format like '4-4-2'.")
+
+    try:
+        # Unpack only DEF, MID, FWD; assume GK = 1
+        def_, mid, fwd = map(int, formation.split('-'))
+        return {'GK': 1, 'DEF': def_, 'MID': mid, 'FWD': fwd}
+    except Exception as e:
+        raise ValueError(f"Error parsing formation: {str(e)}")
+
+
+
+@app.route('/enhance_squad', methods=['POST','GET'])
+def enhance_squad():
+    try:
+        # Fetch players if not already available
+        if not PLAYERS:
+            fetch_players()
+
+        # Parse input parameters
+        budget = float(request.form.get('budget', 100))
+        formation = request.form.get('formation', '4-4-2')
+        free_transfers = int(request.form.get('free_transfers', 0))
+
+        # Parse the formation to determine position limits
+        position_limits = parse_formation(formation)
+
+        # Get the selected players from the form
+        selected_player_ids = request.form.getlist('main_player_') + request.form.getlist('bench_player_')
+        selected_players = [
+            player for player in PLAYERS if str(player['id']) in selected_player_ids
+        ]
+
+        # Train the model and predict player performance
+        model = train_model(PLAYERS)
+        enhanced_players = predict_player_performance(model, PLAYERS)
+
+        # Optimize the squad
+        result = optimize_squad2(
+            enhanced_players,
+            budget=budget,
+            initial_squad=selected_players,
+            position_limits=position_limits,
+            free_transfers=free_transfers
+        )
+
+        # Return JSON for AJAX requests
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({
+                "squad": [
+                    {"web_name": p["web_name"], "now_cost": p["now_cost"]}
+                    for p in result["squad"]
+                ],
+                "transferred_out": [{"name": p["web_name"]} for p in result["transferred_out"]],
+                "transferred_in": [{"name": p["web_name"]} for p in result["transferred_in"]],
+                "free_transfers_used": result["free_transfers_used"],
+                "total_cost": result["total_cost"],
+                "predicted_points": result["predicted_points"],
+            })
+
+        # Render template for standard browser requests
+        return render_template(
+            'enhance_squad.html',
+            budget=budget,
+            players=PLAYERS,
+            current_squad=selected_players,
+            optimized_squad=result["squad"],
+            transferred_out=result["transferred_out"],
+            transferred_in=result["transferred_in"],
+            free_transfers_used=result["free_transfers_used"],
+            total_cost=result["total_cost"],
+            predicted_points=result["predicted_points"]
+        )
+    except Exception as e:
+        error_message = f"Error optimizing squad: {str(e)}"
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({"error": error_message}), 500
+        return render_template(
+            'enhance_squad.html',
+            error=error_message,
+            budget=budget,
+            players=PLAYERS,
+            current_squad=None,
+            optimized_squad=None
+        )
 
 if __name__ == "__main__":
     fetch_players()

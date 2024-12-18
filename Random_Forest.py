@@ -345,7 +345,8 @@ def predict_best_squad():
     # Optimize squad selection
     squad, total_cost, predicted_points = optimize_squad(players_with_predictions, budget=BUDGET)
 
-    return render_template('predict.html', squad=squad, total_cost=total_cost, predicted_points=predicted_points)
+    title = "Random Forest  Model"
+    return render_template('predict.html', title=title, squad=squad, total_cost=total_cost, predicted_points=predicted_points)
 
 
 
@@ -361,6 +362,10 @@ saved_teams_collection = db["saved_teams"]
 def save_squad():
     data = request.get_json()
     squad = data.get("squad")
+    squad_name = data.get("squad_name")
+
+    if not squad_name:
+        return jsonify({"success": False, "message": "Squad name is required"}), 400
 
     # Calculate the total cost of the squad
     total_cost = sum(player['now_cost'] for player in squad) / 10  # converting to millions
@@ -369,11 +374,12 @@ def save_squad():
     date_saved = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     # Check if a similar team is already stored
-    if saved_teams_collection.find_one({"squad": squad}):
-        return jsonify({"success": False, "message": "Team already stored"})
+    if saved_teams_collection.find_one({"squad_name": squad_name}):
+        return jsonify({"success": False, "message": "Squad name already exists"})
 
-    # Save the team in MongoDB with the date and total cost
+    # Save the team in MongoDB with the date, name, and total cost
     saved_teams_collection.insert_one({
+        "squad_name": squad_name,
         "squad": squad,
         "date_saved": date_saved,
         "total_cost": total_cost

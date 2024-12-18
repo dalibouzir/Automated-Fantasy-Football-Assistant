@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premier League Players</title>
     <style>
+        /* Base Styling */
         body {
             background: linear-gradient(to right, #00a2ff, #8c00ff);
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: #ffffff;
             margin: 0;
             padding: 0;
@@ -18,9 +19,9 @@
             max-width: 1200px;
             margin: 20px auto;
             background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
 
         h1 {
@@ -29,24 +30,26 @@
             margin-bottom: 20px;
         }
 
+        /* Form and Filters */
         form {
             text-align: center;
             margin: 20px 0;
         }
 
-        input[type="text"] {
+        input[type="text"], select, button {
             padding: 10px;
-            width: 60%;
-            border-radius: 5px;
-            border: none;
             font-size: 1em;
+            border-radius: 5px;
+            margin: 5px 10px;
         }
 
-        select, button {
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1em;
-            margin-top: 10px;
+        input[type="text"] {
+            width: 60%;
+            border: none;
+        }
+
+        select {
+            width: 150px;
             cursor: pointer;
         }
 
@@ -54,13 +57,20 @@
             background-color: #ff0073;
             color: white;
             border: none;
+            cursor: pointer;
         }
 
-        select {
-            width: 150px;
-            margin: 0 10px;
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
         }
 
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table */
         table {
             width: 100%;
             margin: 20px 0;
@@ -80,7 +90,6 @@
             background-color: #ff0073;
             color: #fff;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         td {
@@ -96,15 +105,7 @@
             cursor: pointer;
         }
 
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
+        /* Pagination */
         .pagination {
             text-align: center;
             margin: 20px 0;
@@ -129,16 +130,245 @@
             pointer-events: none;
         }
 
-        .filters a {
-            margin-left: 10px;
-            color: #ff0073;
-            text-decoration: underline;
-            font-weight: bold;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            input[type="text"] {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            button, select {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
         }
 
-        .filters a:hover {
-            color: #ffffff;
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            table {
+                font-size: 0.85em;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .pagination a {
+                font-size: 0.9em;
+            }
         }
+        /* Add this CSS */
+div[style*="overflow-x: auto;"] {
+    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+    margin-bottom: 20px;
+}
+.input {
+  background-color: #212121;
+
+  height: 40px;
+  padding: 10px;
+  /* text-align: center; */
+  border: 2px solid white;
+  border-radius: 5px;
+  /* box-shadow: 3px 3px 2px rgb(249, 255, 85); */
+}
+
+.input:focus {
+  color: rgb(0, 255, 255);
+  background-color: #212121;
+  outline-color: rgb(0, 255, 255);
+  box-shadow: -3px -3px 15px rgb(0, 255, 255);
+  transition: .1s;
+  transition-property: box-shadow;
+}
+/* Container for the buttons */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Button styles */
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 3rem;
+    background-size: 300% 300%;
+    cursor: pointer;
+    backdrop-filter: blur(1rem);
+    border-radius: 5rem;
+    transition: 0.5s;
+    animation: gradient_301 5s ease infinite;
+    border: double 4px transparent;
+    background-image: linear-gradient(#212121, #212121),
+        linear-gradient(137.48deg, #00a2ff 10%, #8c00ff 45%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    font-size: 1.2rem;
+}
+
+#container-stars {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: 0.5s;
+    backdrop-filter: blur(1rem);
+    border-radius: 5rem;
+}
+
+strong {
+    z-index: 2;
+    font-family: "Arial";
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: #ff0073;
+
+}
+
+#glow {
+    position: absolute;
+    display: flex;
+    width: 12rem;
+    opacity: 0.5; /* Faded glow effect */
+}
+
+.circle {
+    width: 100%;
+    height: 30px;
+    filter: blur(1rem); /* Reduced blur for more subtle effect */
+    animation: pulse_3011 4s infinite;
+    z-index: -1;
+}
+
+.circle:nth-of-type(1) {
+    background: rgba(0, 162, 255, 0.636); /* Updated color */
+}
+
+.circle:nth-of-type(2) {
+    background: rgba(140, 0, 255, 0.704); /* Updated color */
+}
+
+.btn:hover #container-stars {
+    z-index: 1;
+    background-color: #212121;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+.btn:active {
+    border: double 4px #fe53bb;
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    animation: none;
+}
+
+.btn:active .circle {
+    background: #fe53bb;
+}
+
+#stars {
+    position: relative;
+    background: transparent;
+    width: 200rem;
+    height: 200rem;
+}
+
+#stars::after {
+    content: "";
+    position: absolute;
+    top: -10rem;
+    left: -100rem;
+    width: 100%;
+    height: 100%;
+    animation: animStarRotate 90s linear infinite;
+}
+
+#stars::after {
+    background-image: radial-gradient(#ffffff 1px, transparent 1%);
+    background-size: 50px 50px;
+}
+
+#stars::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 170%;
+    height: 500%;
+    animation: animStar 60s linear infinite;
+}
+
+#stars::before {
+    background-image: radial-gradient(#ffffff 1px, transparent 1%);
+    background-size: 50px 50px;
+    opacity: 0.5;
+}
+
+@keyframes animStar {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-135rem);
+    }
+}
+
+@keyframes animStarRotate {
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0);
+    }
+}
+
+@keyframes gradient_301 {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes pulse_3011 {
+    0% {
+        transform: scale(0.75);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.75);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
 
     </style>
 </head>
@@ -146,96 +376,114 @@
     <div class="container">
         <h1>Premier League Players</h1>
         <form id="search-form" method="get" action="/">
-            <div class="filters">
-                <!-- Search Field -->
-                <input
-                    type="text"
-                    id="search"
-                    name="search"
-                    placeholder="Search by player name..."
-                    value="{{ search_query }}"
-                    class="search-bar"
-                />
-                </br></br></br>
-                <!-- Position Filter -->
-                <select name="position" id="position" class="filter-dropdown">
-                    <option value="">All Positions</option>
-                    <option value="GK" {% if position_filter == 'GK' %}selected{% endif %}>Goalkeeper</option>
-                    <option value="DEF" {% if position_filter == 'DEF' %}selected{% endif %}>Defender</option>
-                    <option value="MID" {% if position_filter == 'MID' %}selected{% endif %}>Midfielder</option>
-                    <option value="FWD" {% if position_filter == 'FWD' %}selected{% endif %}>Forward</option>
-                </select>
-                
-                <!-- Team Filter -->
-                <select name="team" id="team" class="filter-dropdown">
-                    <option value="">All Teams</option>
-                    {% for team in teams %}
-                    <option value="{{ team }}" {% if team_filter == team %}selected{% endif %}>{{ team }}</option>
-                    {% endfor %}
-                </select>
-        
-                <!-- Sort By -->
-                <select name="sort_by" id="sort_by" class="filter-dropdown">
-                    <option value="cost" {% if sort_by == 'cost' %}selected{% endif %}>Sort by Cost</option>
-                    <option value="points" {% if sort_by == 'points' %}selected{% endif %}>Sort by Points</option>
-                </select>
-        
-                <!-- Apply Button -->
-                <button type="submit" class="apply-btn">Apply</button>
-                <a href="/predict">See Predicted Sqaud</a>
-                <a href="/gameweeks_with_games">See Game Weks</a>
-               
-            </div>
-        </form>
-        
-        
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Team</th>
-                    <th>Position</th>
-                    <th>Cost</th>
-                    <th>Points</th>
-                    <th>Next Opponent</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody id="player-table">
-                {% for player in players %}
-                <tr>
-                    <td>{{ player.web_name }}</td>
-                    <td>{{ player.team_name }}</td>
-                    <td>{{ player.position }}</td>
-                    <td>£{{ player.now_cost / 10 }}M</td>
-                    <td>{{ player.total_points }}</td>
-                    <td>{{ player.next_opponent }}</td>
-
-                    <td><a href="/player/{{ player.id }}">See More</a></td>
-                </tr>
+            <input 
+    type="text" 
+    id="search" 
+    class="input" 
+    name="search" 
+    placeholder="Search by player name..." 
+    value="{{ search_query }}">
+            <br><br>
+            <select name="position" id="position">
+                <option value="">All Positions</option>
+                <option value="GK" {% if position_filter == 'GK' %}selected{% endif %}>Goalkeeper</option>
+                <option value="DEF" {% if position_filter == 'DEF' %}selected{% endif %}>Defender</option>
+                <option value="MID" {% if position_filter == 'MID' %}selected{% endif %}>Midfielder</option>
+                <option value="FWD" {% if position_filter == 'FWD' %}selected{% endif %}>Forward</option>
+            </select>
+            <select name="team" id="team">
+                <option value="">All Teams</option>
+                {% for team in teams %}
+                <option value="{{ team }}" {% if team_filter == team %}selected{% endif %}>{{ team }}</option>
                 {% endfor %}
-            </tbody>
-        </table>
-
-        <div class="pagination">
-            <a href="/?page={{ page - 1 }}&search={{ search_query }}&sort_by={{ sort_by }}&position={{ position_filter }}&team={{ team_filter }}"
-               class="{% if page <= 1 %}disabled{% endif %}">
-                Previous
-            </a>
-            <a href="/?page={{ page + 1 }}&search={{ search_query }}&sort_by={{ sort_by }}&position={{ position_filter }}&team={{ team_filter }}"
-               class="{% if page * per_page >= total %}disabled{% endif %}">
-                Next
-            </a>
+            </select>
+            <select name="sort_by" id="sort_by">
+                <option value="cost" {% if sort_by == 'cost' %}selected{% endif %}>Sort by Cost</option>
+                <option value="points" {% if sort_by == 'points' %}selected{% endif %}>Sort by Points</option>
+            </select>
+            <button type="submit" class="apply-btn">Apply</button>
+            <br><br>
+            <div class="button-container">
+                <a href="/predict" class="btn">
+                    <strong>See Predicted Squad</strong>
+                    <div id="container-stars">
+                        <div id="stars"></div>
+                    </div>
+                    <div id="glow">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                </a>
+            
+                <a href="/gameweeks_with_games" class="btn">
+                    <strong>See Game Weeks</strong>
+                    <div id="container-stars">
+                        <div id="stars"></div>
+                    </div>
+                    <div id="glow">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                </a>
+            
+                <!-- New "Optimize Your Squad" Button -->
+                <a href="/enhance_squad" class="btn">
+                    <strong>Optimize Your Squad</strong>
+                    <div id="container-stars">
+                        <div id="stars"></div>
+                    </div>
+                    <div id="glow">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                </a>
+            </div>
+            
+        </form>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Team</th>
+                        <th>Position</th>
+                        <th>Cost</th>
+                        <th>Points</th>
+                        <th>Next Opponent</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="player-table">
+                    {% for player in players %}
+                    <tr>
+                        <td>{{ player.web_name }}</td>
+                        <td>{{ player.team_name }}</td>
+                        <td>{{ player.position }}</td>
+                        <td>£{{ player.now_cost / 10 }}M</td>
+                        <td>{{ player.total_points }}</td>
+                        <td>{{ player.next_opponent }}</td>
+                        <td><a href="/player/{{ player.id }}">See More</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        
+        <div class="pagination">
+            <a href="/?page={{ page - 1 }}" class="{% if page <= 1 %}disabled{% endif %}">Previous</a>
+            <a href="/?page={{ page + 1 }}" class="{% if page * per_page >= total %}disabled{% endif %}">Next</a>
+        </div>
+    </div>
 
     <script>
-        document.getElementById("search").addEventListener("input", function () {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(function () {
-                fetchFilteredData();
-            }, 500);
-        });
+        let debounceTimeout;
+
+document.getElementById("search").addEventListener("input", function () {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(function () {
+        fetchFilteredData();
+    }, 500);
+});
 
         function fetchFilteredData() {
             const formData = new FormData(document.getElementById("search-form"));

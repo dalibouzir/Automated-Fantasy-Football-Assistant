@@ -77,6 +77,7 @@
       }
 
       /* Modal Styles */
+      /* Modal Styles */
       .modal {
         display: none;
         position: fixed;
@@ -86,18 +87,25 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
+        overflow: auto; /* Allow scrolling for overflowing content */
       }
 
       .modal-content {
         background-color: #222;
         color: #fff;
-        margin: 10% auto;
+        position: relative;
+        margin: auto;
+        top: 50%; /* Center vertically */
+        transform: translateY(-50%); /* Adjust for proper centering */
         padding: 20px;
         border-radius: 8px;
         width: 80%;
         max-width: 900px;
+        max-height: 90vh; /* Limit the height to viewport height */
+        overflow-y: auto; /* Make content scrollable if it exceeds the modal height */
       }
 
+      /* Close Button Styles */
       .close-btn {
         font-size: 28px;
         color: #aaa;
@@ -109,12 +117,43 @@
         color: white;
       }
 
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .modal-content {
+          width: 90%;
+          padding: 15px;
+        }
+
+        .close-btn {
+          font-size: 24px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .modal-content {
+          width: 95%;
+          padding: 12px;
+        }
+
+        .close-btn {
+          font-size: 20px;
+        }
+
+        .table {
+          font-size: 12px;
+          overflow-x: auto;
+          display: block;
+          white-space: nowrap;
+        }
+      }
+
+      /* Responsive Styles */
       .compare-highlight-same {
-        background-color: #28a745 !important; /* Green */
+        background-color: #28a745 !important;
       }
 
       .compare-highlight-different {
-        background-color: #dc3545 !important; /* Red */
+        background-color: #dc3545 !important;
       }
     </style>
   </head>
@@ -155,8 +194,8 @@
           <thead>
             <tr>
               <th>Player</th>
-              <th>Squad 1</th>
-              <th>Squad 2</th>
+              <th id="squad1Name">Squad 1</th>
+              <th id="squad2Name">Squad 2</th>
             </tr>
           </thead>
           <tbody id="compareTableBody">
@@ -175,6 +214,8 @@
             <tr>
               <th>Player Name</th>
               <th>Position</th>
+              <th>Predict points</th>
+
               <th>Team</th>
               <th>Cost (M)</th>
               <th>Points</th>
@@ -186,8 +227,6 @@
         </table>
       </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
       const selectedSquads = [];
@@ -244,6 +283,7 @@
           return;
         }
 
+        // Fetch details of both squads
         Promise.all([
           fetch(`/api/squad_players/${selectedSquads[0]}`).then((res) =>
             res.json()
@@ -252,6 +292,13 @@
             res.json()
           ),
         ]).then(([squad1, squad2]) => {
+          // Update squad names in the modal
+          document.getElementById("squad1Name").textContent =
+            squad1.squad_name || "Squad 1";
+          document.getElementById("squad2Name").textContent =
+            squad2.squad_name || "Squad 2";
+
+          // Populate the comparison table
           const compareTableBody = document.getElementById("compareTableBody");
           compareTableBody.innerHTML = "";
 
@@ -271,13 +318,14 @@
                 : "compare-highlight-different"
             );
             row.innerHTML = `
-                        <td>${playerName}</td>
-                        <td>${player1 ? player1.web_name : "N/A"}</td>
-                        <td>${player2 ? player2.web_name : "N/A"}</td>
-                    `;
+        <td>${playerName}</td>
+        <td>${player1 ? player1.web_name : "N/A"}</td>
+        <td>${player2 ? player2.web_name : "N/A"}</td>
+      `;
             compareTableBody.appendChild(row);
           });
 
+          // Show the modal
           document.getElementById("compareModal").style.display = "block";
         });
       }
@@ -301,15 +349,27 @@
             const playerTableBody = document.getElementById("playerTableBody");
             playerTableBody.innerHTML = "";
 
+            // Map element_type values to positions
+            function mapPosition(elementType) {
+              const positions = {
+                1: "GK", // Goalkeeper
+                2: "DEF", // Defender
+                3: "MID", // Midfielder
+                4: "FWD", // Forward
+              };
+              return positions[elementType] || "N/A"; // Default to N/A
+            }
+
             squad.squad.forEach((player) => {
               const row = document.createElement("tr");
               row.innerHTML = `
-                            <td>${player.web_name}</td>
-                            <td>${player.element_type}</td>
-                            <td>${player.team}</td>
-                            <td>${player.now_cost}</td>
-                            <td>${player.total_points}</td>
-                        `;
+          <td>${player.web_name}</td>
+          <td>${mapPosition(player.element_type)}</td>
+          <td>${player.predicted_points}</td>
+          <td>${player.team}</td>
+          <td>${player.now_cost}</td>
+          <td>${player.total_points}</td>
+        `;
               playerTableBody.appendChild(row);
             });
 
@@ -327,6 +387,7 @@
           document.getElementById("fullSquadModal").style.display = "none";
         }
       };
+
       // Function to delete a squad
       function deleteSquad(squadId) {
         if (confirm("Are you sure you want to delete this squad?")) {
